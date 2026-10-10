@@ -1,0 +1,54 @@
+{
+  "income_certificate": {
+    "id": "income_certificate",
+    "titleTa": "வருமானச் சான்றிதழ்",
+    "titleEn": "Income Certificate",
+    "fieldId": "income_cert_no",
+    "fieldNameTa": "வருமானச் சான்றிதழ் எண்",
+    "fieldNameEn": "Income Certificate Number",
+    "locationTa": "சான்றிதழின் வலது மேல் மூலையில் 'TN-72023...' எனத் தொடங்கும் 13 இலக்க எண் இருக்கும்.",
+    "locationEn": "Located at the top right corner of the document starting with 'TN-72023...' (13 digits).",
+    "authorityTa": "VAO அலுவலகம் அல்லது இ-சேவை மையத்தில் விண்ணப்பித்துப் பெறலாம்.",
+    "authorityEn": "Issued by Village Administrative Officer (VAO) or e-Sevai Centre.",
+    "sampleImage": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='240' viewBox='0 0 400 240'><rect width='400' height='240' fill='%23F8FAFC' stroke='%23CBD5E1' stroke-width='2' rx='8'/><rect width='400' height='40' fill='%231646A2' rx='8'/><text x='20' y='26' fill='%23FFFFFF' font-size='16' font-family='sans-serif' font-weight='bold'>தமிழ்நாடு அரசு — வருமானச் சான்றிதழ் (மாதிரி)</text><text x='240' y='65' fill='%23B42318' font-size='14' font-family='sans-serif' font-weight='bold'>சான்றிதழ் எண்: TN-72026101001 [இங்கே பாருங்கள்]</text><rect x='230' y='48' width='160' height='25' fill='none' stroke='%23B42318' stroke-width='2' stroke-dasharray='4'/><text x='20' y='95' fill='%23172033' font-size='13' font-family='sans-serif'>விண்ணப்பதாரர் பெயர்: மாதிரி செல்வன்</text><text x='20' y='125' fill='%23172033' font-size='13' font-family='sans-serif'>ஆண்டு வருமானம்: ₹72,000/-</text><text x='20' y='155' fill='%23172033' font-size='13' font-family='sans-serif'>வழங்கிய அலுவலர்: வட்டாட்சியர் (Tahsildar)</text><text x='20' y='210' fill='%2364748B' font-size='11' font-family='sans-serif'>* இது ஒரு மாதிரி ஆவணம் மட்டுமே. இதில் உள்ள விவரங்கள் கற்பனையானவை.</text></svg>"
+  },
+  "caste_certificate": {
+    "id": "caste_certificate",
+    "titleTa": "சாதிச் சான்றிதழ்",
+    "titleEn": "Caste Certificate",
+    "fieldId": "caste_cert_no",
+    "fieldNameTa": "சாதிச் சான்றிதழ் எண்",
+    "fieldNameEn": "Caste Certificate Number",
+    "locationTa": "சான்றிதழின் மேல் பகுதியில் தலைப்பிற்கு கீழே 'TN-52023...' என அச்சிடப்பட்டிருக்கும்.",
+    "locationEn": "Printed at the top section under the title, starting with 'TN-52023...'.",
+    "authorityTa": "மண்டல துணை வட்டாட்சியர் அல்லது இ-சேவை மையம் மூலம் பெறலாம்.",
+    "authorityEn": "Issued by Zonal Deputy Tahsildar / e-Sevai Centre.",
+    "sampleImage": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='240' viewBox='0 0 400 240'><rect width='400' height='240' fill='%23F8FAFC' stroke='%23CBD5E1' stroke-width='2' rx='8'/><rect width='400' height='40' fill='%230F9D8A' rx='8'/><text x='20' y='26' fill='%23FFFFFF' font-size='16' font-family='sans-serif' font-weight='bold'>சாதிச் சான்றிதழ் / Community Certificate</text><text x='20' y='70' fill='%23B42318' font-size='14' font-family='sans-serif' font-weight='bold'>சான்றிதழ் எண்: TN-52026998877 [இங்கே பாருங்கள்]</text><rect x='15' y='53' width='280' height='25' fill='none' stroke='%23B42318' stroke-width='2' stroke-dasharray='4'/><text x='20' y='110' fill='%23172033' font-size='13' font-family='sans-serif'>பெயர்: மாதிரி வேல்</text><text x='20' y='140' fill='%23172033' font-size='13' font-family='sans-serif'>பிரிவு: BC / MBC / SC / ST</text><text x='20' y='210' fill='%2364748B' font-size='11' font-family='sans-serif'>* இது ஒரு மாதிரி ஆவணம் மட்டுமே. இதில் உள்ள விவரங்கள் கற்பனையானவை.</text></svg>"
+  },
+  "ration_card": {
+    "id": "ration_card",
+    "titleTa": "குடும்ப அட்டை (ரேஷன் கார்டு)",
+    "titleEn": "Ration Card",
+    "fieldId": "ration_card_no",
+    "fieldNameTa": "ரேஷன் அட்டை எண்",
+    "fieldNameEn": "Ration Card Number",
+    "locationTa": "ஸ்மார்ட் குடும்ப அட்டையின் முன்பக்கத்தில் புகைப்படம் மற்றும் QR குறியீட்டிற்கு அருகில் 12 இலக்க எண் இருக்கும்.",
+    "locationEn": "Printed on the front face of Smart Ration Card next to the photo and QR code.",
+    "authorityTa": "உணவுப் பொருள் வழங்கல் மற்றும் நுகர்வோர் பாதுகாப்புத் துறை.",
+    "authorityEn": "Department of Civil Supplies and Consumer Protection.",
+    "sampleImage": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='240' viewBox='0 0 400 240'><rect width='400' height='240' fill='%23FFFBEB' stroke='%23F59E0B' stroke-width='2' rx='8'/><rect width='400' height='40' fill='%23B45309' rx='8'/><text x='20' y='26' fill='%23FFFFFF' font-size='16' font-family='sans-serif' font-weight='bold'>தமிழ்நாடு குடும்ப அட்டை — Smart Ration Card</text><rect x='20' y='60' width='70' height='80' fill='%23E2E8F0' stroke='%2394A3B8'/><text x='35' y='105' fill='%2364748B' font-size='10'>படம்</text><text x='110' y='80' fill='%23B42318' font-size='14' font-family='sans-serif' font-weight='bold'>அட்டை எண்: 05/G/0123456 [இங்கே பாருங்கள்]</text><rect x='105' y='63' width='230' height='25' fill='none' stroke='%23B42318' stroke-width='2' stroke-dasharray='4'/><text x='110' y='110' fill='%23172033' font-size='13' font-family='sans-serif'>தலைவர்: மாதிரி குமார்</text><text x='110' y='135' fill='%23172033' font-size='13' font-family='sans-serif'>உறுப்பினர்கள்: 4</text><text x='20' y='210' fill='%2364748B' font-size='11' font-family='sans-serif'>* இது ஒரு மாதிரி ஆவணம் மட்டுமே. இதில் உள்ள விவரங்கள் கற்பனையானவை.</text></svg>"
+  },
+  "aadhaar_card": {
+    "id": "aadhaar_card",
+    "titleTa": "ஆதார் அட்டை",
+    "titleEn": "Aadhaar Card",
+    "fieldId": "aadhaar_no",
+    "fieldNameTa": "ஆதார் எண்",
+    "fieldNameEn": "Aadhaar Number",
+    "locationTa": "ஆதார் அட்டையின் கீழ்பகுதியில் தடித்த 12 இலக்க எண்ணாக (xxxx xxxx xxxx) அச்சிடப்பட்டிருக்கும்.",
+    "locationEn": "Printed at the bottom section of Aadhaar card as a 12-digit number (xxxx xxxx xxxx).",
+    "authorityTa": "UIDAI (இந்திய தனித்துவ அடையாள ஆணையம்).",
+    "authorityEn": "Unique Identification Authority of India (UIDAI).",
+    "sampleImage": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='240' viewBox='0 0 400 240'><rect width='400' height='240' fill='%23FFFFFF' stroke='%23CBD5E1' stroke-width='2' rx='8'/><rect width='400' height='30' fill='%231646A2' rx='8'/><text x='20' y='20' fill='%23FFFFFF' font-size='14' font-family='sans-serif'>ஆதார் — சாதாரண மக்களின் அதிகாரம் (மாதிரி)</text><text x='20' y='70' fill='%23172033' font-size='14' font-family='sans-serif'>பெயர்: மாதிரி ராஜ்</text><text x='20' y='95' fill='%23172033' font-size='14' font-family='sans-serif'>பிறந்த தேதி: 01/01/1990</text><rect x='80' y='140' width='240' height='35' fill='%23FEF2F2' stroke='%23B42318' stroke-width='2' rx='4'/><text x='95' y='163' fill='%23B42318' font-size='18' font-family='sans-serif' font-weight='bold'>xxxx xxxx 9012 [ஆதார் எண்]</text><text x='20' y='210' fill='%2364748B' font-size='11' font-family='sans-serif'>* இது ஒரு மாதிரி ஆவணம் மட்டுமே. இதில் உள்ள விவரங்கள் கற்பனையானவை.</text></svg>"
+  }
+}

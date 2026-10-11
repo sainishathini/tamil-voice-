@@ -3,6 +3,8 @@ import {
   FileCheck2,
   Volume2,
   Download,
+  Mic,
+  Save,
   Lock,
   Trash2,
   Edit3,
@@ -10,7 +12,8 @@ import {
   CheckCircle2,
   AlertCircle,
   ArrowLeft,
-  ShieldCheck
+  ShieldCheck,
+  X
 } from 'lucide-react';
 import ta from '../i18n/ta.js';
 import en from '../i18n/en.js';
@@ -37,6 +40,9 @@ export default function FormReview({
   const [isPrivacyExport, setIsPrivacyExport] = useState(false);
   const [saveStatusMsg, setSaveStatusMsg] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [editingFieldId, setEditingFieldId] = useState(null);
+  const [editingFieldValue, setEditingFieldValue] = useState('');
+  const [editValidationError, setEditValidationError] = useState('');
 
   const fields = currentForm?.fields || [];
   const formValues = currentForm?.formValues || {};
@@ -68,6 +74,25 @@ export default function FormReview({
   const completionPercentage = Math.round(
     ((fields.length - missingRequired.length) / Math.max(1, fields.length)) * 100
   );
+
+  const startTextEdit = (field) => {
+    setEditingFieldId(field.id);
+    setEditingFieldValue(formValues[field.id] || '');
+    setEditValidationError('');
+  };
+
+  const saveTextEdit = (field) => {
+    const validation = validateFormField(field, editingFieldValue);
+    if (!validation.valid) {
+      setEditValidationError(validation.message);
+      return;
+    }
+
+    setFormValues(values => ({ ...values, [field.id]: editingFieldValue }));
+    setEditingFieldId(null);
+    setEditingFieldValue('');
+    setEditValidationError('');
+  };
 
   // Review Form Aloud
   const handleReviewAloud = () => {
@@ -241,29 +266,75 @@ export default function FormReview({
             const val = formValues[f.id] || '';
             const isMissing = f.required && !val;
             return (
-              <div key={f.id} className="py-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-                <div>
+              <div key={f.id} className="py-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div className="min-w-0 flex-1 w-full">
                   <span className="text-xs font-bold text-slate-500 block">
                     {idx + 1}. {f.labelTa} ({f.labelEn})
                   </span>
-                  <div className="text-base font-bold text-slate-900 mt-0.5">
-                    {val ? (
-                      f.isSensitive ? maskSensitiveValue(val, f.id) : val
-                    ) : (
-                      <span className="text-amber-600 italic text-sm font-semibold">
-                        {lang === 'ta' ? '[இன்னும் நிரப்பப்படவில்லை]' : '[Not completed]'}
-                      </span>
-                    )}
-                  </div>
+                  {editingFieldId === f.id ? (
+                    <div className="mt-2 space-y-2">
+                      <input
+                        autoFocus
+                        type={f.isSensitive ? 'password' : f.type === 'number' ? 'number' : f.type === 'date' ? 'date' : 'text'}
+                        value={editingFieldValue}
+                        onChange={(event) => {
+                          setEditingFieldValue(event.target.value);
+                          setEditValidationError('');
+                        }}
+                        aria-label={`${t.editingText}: ${f.labelTa}`}
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg font-semibold text-slate-900 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+                      />
+                      {editValidationError && (
+                        <p role="alert" className="text-sm font-semibold text-red-700">{editValidationError}</p>
+                      )}
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          onClick={() => saveTextEdit(f)}
+                          className="inline-flex items-center gap-1.5 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-bold touch-target"
+                        >
+                          <Save className="w-4 h-4" />
+                          <span>{t.saveChanges}</span>
+                        </button>
+                        <button
+                          onClick={() => { setEditingFieldId(null); setEditValidationError(''); }}
+                          className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-bold touch-target"
+                        >
+                          <X className="w-4 h-4" />
+                          <span>{t.cancel}</span>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-base font-bold text-slate-900 mt-0.5">
+                      {val ? (
+                        f.isSensitive ? maskSensitiveValue(val, f.id) : val
+                      ) : (
+                        <span className="text-amber-600 italic text-sm font-semibold">
+                          {lang === 'ta' ? '[இன்னும் நிரப்பப்படவில்லை]' : '[Not completed]'}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
 
-                <button
-                  onClick={onNavigateFilling}
-                  className="p-2 text-slate-400 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors text-xs font-bold flex items-center space-x-1 touch-target"
-                >
-                  <Edit3 className="w-4 h-4" />
-                  <span>{t.btnEdit}</span>
-                </button>
+                {!editingFieldId && (
+                  <div className="flex shrink-0 flex-wrap gap-2">
+                    <button
+                      onClick={() => startTextEdit(f)}
+                      className="px-3 py-2 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors text-xs font-bold flex items-center gap-1.5 touch-target"
+                    >
+                      <Edit3 className="w-4 h-4" />
+                      <span>{t.editingText}</span>
+                    </button>
+                    <button
+                      onClick={() => onNavigateFilling(f.id)}
+                      className="px-3 py-2 text-indigo-700 hover:bg-indigo-50 rounded-lg transition-colors text-xs font-bold flex items-center gap-1.5 touch-target"
+                    >
+                      <Mic className="w-4 h-4" />
+                      <span>{t.editingVoice}</span>
+                    </button>
+                  </div>
+                )}
               </div>
             );
           })}

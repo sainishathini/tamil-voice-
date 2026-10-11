@@ -27,14 +27,20 @@ import { DEMO_SENTENCES } from '../lib/sampleForms.js';
 export default function VoiceFilling({
   lang,
   currentForm,
+  initialFieldId,
   setFormValues,
   onOpenFieldHelp,
-  onNavigateReview
+  onNavigateReview,
+  onFinishFieldEdit
 }) {
   const t = lang === 'ta' ? ta : en;
+  const isSingleFieldEdit = Boolean(initialFieldId);
 
   const [mode, setMode] = useState('guided'); // 'guided' | 'all-at-once'
-  const [currentFieldIndex, setCurrentFieldIndex] = useState(0);
+  const [currentFieldIndex, setCurrentFieldIndex] = useState(() => {
+    const index = currentForm?.fields?.findIndex(field => field.id === initialFieldId) ?? -1;
+    return index >= 0 ? index : 0;
+  });
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [editingValue, setEditingValue] = useState('');
@@ -136,6 +142,11 @@ export default function VoiceFilling({
     setIsConfirmStep(false);
     setValidationError('');
 
+    if (isSingleFieldEdit) {
+      onFinishFieldEdit();
+      return;
+    }
+
     // Advance to next field if available
     if (currentFieldIndex < fields.length - 1) {
       setCurrentFieldIndex(currentFieldIndex + 1);
@@ -227,9 +238,19 @@ export default function VoiceFilling({
             <Mic className="w-6 h-6 text-blue-700" />
             <span>{currentForm.titleTa || currentForm.title}</span>
           </h2>
-          <p className="text-xs text-slate-500 mt-0.5">{t.chooseFillingMode}</p>
+          <p className="text-xs text-slate-500 mt-0.5">
+            {isSingleFieldEdit ? t.editingSingleField : t.chooseFillingMode}
+          </p>
         </div>
 
+        {isSingleFieldEdit ? (
+          <button
+            onClick={onFinishFieldEdit}
+            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm touch-target"
+          >
+            {t.cancel}
+          </button>
+        ) : (
         <div className="flex bg-slate-100 p-1.5 rounded-xl border border-slate-200 w-full sm:w-auto">
           <button
             onClick={() => setMode('guided')}
@@ -250,6 +271,7 @@ export default function VoiceFilling({
             <span>{t.allAtOnceTitle.split(' ')[0]}</span>
           </button>
         </div>
+        )}
       </div>
 
       {/* Sensitive Data Protection Notice Banner */}
@@ -376,7 +398,7 @@ export default function VoiceFilling({
           </div>
 
           {/* Navigation Controls */}
-          <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+          {!isSingleFieldEdit && <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
             <button
               onClick={() => setCurrentFieldIndex(Math.max(0, currentFieldIndex - 1))}
               disabled={currentFieldIndex === 0}
@@ -398,13 +420,13 @@ export default function VoiceFilling({
               <span>{t.btnNext}</span>
               <ChevronRight className="w-4 h-4" />
             </button>
-          </div>
+          </div>}
 
         </div>
       )}
 
       {/* MODE B: SPEAK EVERYTHING AT ONCE (FULL SENTENCE) */}
-      {mode === 'all-at-once' && (
+      {!isSingleFieldEdit && mode === 'all-at-once' && (
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-lg space-y-6">
           <div className="space-y-2">
             <h3 className="text-xl font-bold text-slate-900">{t.allAtOnceTitle}</h3>
@@ -483,7 +505,7 @@ export default function VoiceFilling({
       )}
 
       {/* DEMO MODE: CLICKABLE TAMIL SAMPLE SENTENCES */}
-      <div className="bg-slate-900 text-white p-6 rounded-3xl space-y-4 shadow-lg">
+      {!isSingleFieldEdit && <div className="bg-slate-900 text-white p-6 rounded-3xl space-y-4 shadow-lg">
         <div>
           <h3 className="text-lg font-bold flex items-center space-x-2">
             <Sparkles className="w-5 h-5 text-amber-400" />
@@ -512,9 +534,10 @@ export default function VoiceFilling({
           ))}
         </div>
       </div>
+      }
 
       {/* Bottom CTA to Form Review */}
-      <div className="flex justify-end">
+      {!isSingleFieldEdit && <div className="flex justify-end">
         <button
           onClick={onNavigateReview}
           className="px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-lg rounded-2xl shadow-lg flex items-center space-x-2 transition-transform active:scale-95 touch-target"
@@ -522,7 +545,7 @@ export default function VoiceFilling({
           <span>{lang === 'ta' ? 'படிவச் சரிபார்ப்பிற்குச் செல்க' : 'Proceed to Form Review'}</span>
           <ArrowRight className="w-6 h-6" />
         </button>
-      </div>
+      </div>}
 
     </div>
   );

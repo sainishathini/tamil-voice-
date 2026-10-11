@@ -7,6 +7,7 @@ import {
   HelpCircle,
   History,
   ShieldAlert,
+  LockKeyhole,
   Settings,
   LogOut,
   Menu,
@@ -27,6 +28,7 @@ export default function Sidebar({ activeTab, setActiveTab, lang, user, onLogout 
     { id: 'help-centre', label: t.navHelpCentre, icon: HelpCircle },
     { id: 'recent-access', label: t.navRecentAccess, icon: History },
     { id: 'privacy', label: t.navPrivacy, icon: ShieldAlert },
+    { id: 'secure-details', label: t.navSecureDetails, icon: LockKeyhole },
     { id: 'settings', label: t.navSettings, icon: Settings },
   ];
 
@@ -60,17 +62,17 @@ export default function Sidebar({ activeTab, setActiveTab, lang, user, onLogout 
       )}
 
       {/* Sidebar Content */}
-      <aside className={`
+      <aside className={`app-sidebar
         fixed lg:static inset-y-0 left-0 z-40 w-64 bg-slate-900 text-slate-300 flex flex-col justify-between
         transform transition-transform duration-200 ease-in-out lg:transform-none shadow-xl lg:shadow-none
         ${mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        <div className="p-4 space-y-6 overflow-y-auto">
-          <div className="px-3 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+        <div className="sidebar-menu p-4 space-y-6 overflow-y-auto">
+          <div className="sidebar-label px-3 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
             {lang === 'ta' ? 'வழிசெலுத்தல்' : 'Navigation Menu'}
           </div>
 
-          <nav className="space-y-1">
+          <nav className="sidebar-nav space-y-1">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -78,7 +80,7 @@ export default function Sidebar({ activeTab, setActiveTab, lang, user, onLogout 
                 <button
                   key={item.id}
                   onClick={() => handleSelect(item.id)}
-                  className={`
+                  className={`sidebar-nav-item
                     w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-sm transition-all touch-target
                     ${isActive
                       ? 'bg-blue-700 text-white shadow-md shadow-blue-900/50 font-semibold'

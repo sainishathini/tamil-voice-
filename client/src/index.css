@@ -1,14 +1,7 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: 'Noto Sans Tamil';
-  src: url('./assets/fonts/NotoSansTamil-Regular.ttf') format('truetype');
-  font-weight: 400 700;
-  font-style: normal;
-}
-
 @theme {
-  --font-sans: 'Noto Sans Tamil', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Nirmala UI', Nirmala, Latha, 'Noto Sans Tamil', sans-serif;
   --color-gov-blue: #1646A2;
   --color-gov-blue-dark: #123780;
   --color-gov-teal: #0F9D8A;
@@ -34,7 +27,7 @@
   --warning: #B45309;
   --error: #B42318;
   --border-color: #E2E8F0;
-  --font-family: 'Noto Sans Tamil', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-family: 'Nirmala UI', Nirmala, Latha, 'Noto Sans Tamil', sans-serif;
 }
 
 * {

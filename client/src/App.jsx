@@ -10,6 +10,7 @@ import HelpCentre from './components/HelpCentre.jsx';
 import RecentAccess from './components/RecentAccess.jsx';
 import PrivacyCenter from './components/PrivacyCenter.jsx';
 import SettingsPage from './components/SettingsPage.jsx';
+import SecurePersonalDetails from './components/SecurePersonalDetails.jsx';
 import AuthModal from './components/AuthModal.jsx';
 import { SAMPLE_FORMS } from './lib/sampleForms.js';
 
@@ -24,6 +25,7 @@ export default function App() {
   const [savedRecordsCount, setSavedRecordsCount] = useState(0);
   const [sessionCompletedCount, setSessionCompletedCount] = useState(0);
   const [activeHelpField, setActiveHelpField] = useState(null);
+  const [fieldToEdit, setFieldToEdit] = useState(null);
 
   // Initialize session & user check on mount
   useEffect(() => {
@@ -74,16 +76,30 @@ export default function App() {
   const handleSetFormValues = (newValues) => {
     setCurrentForm(prev => ({
       ...prev,
-      formValues: newValues
+      formValues: typeof newValues === 'function'
+        ? newValues(prev?.formValues || {})
+        : newValues
     }));
   };
 
   const handleStartNewForm = () => {
+    setFieldToEdit(null);
     setActiveTab('new-form');
   };
 
   const handleContinueForm = () => {
+    setFieldToEdit(null);
     setActiveTab('voice-filling');
+  };
+
+  const handleEditField = (fieldId) => {
+    setFieldToEdit(fieldId);
+    setActiveTab('voice-filling');
+  };
+
+  const handleFinishFieldEdit = () => {
+    setFieldToEdit(null);
+    setActiveTab('review');
   };
 
   const handleClearForm = () => {
@@ -104,7 +120,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+    <div className="app-shell min-h-screen flex flex-col font-sans">
       
       {/* Top Header */}
       <Header
@@ -116,7 +132,7 @@ export default function App() {
       />
 
       {/* Main Layout Grid */}
-      <div className="flex-1 flex flex-col lg:flex-row max-w-7xl w-full mx-auto">
+      <div className="app-layout flex-1 flex flex-col lg:flex-row w-full">
         
         {/* Navigation Sidebar */}
         <Sidebar
@@ -128,7 +144,7 @@ export default function App() {
         />
 
         {/* Dynamic Content View Container */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        <main className="app-main flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
           {activeTab === 'dashboard' && (
             <Dashboard
               lang={lang}
@@ -144,7 +160,7 @@ export default function App() {
           {activeTab === 'new-form' && (
             <NewForm
               lang={lang}
-              onFormCreated={(form) => { setCurrentForm(form); setActiveTab('voice-filling'); }}
+              onFormCreated={(form) => { setCurrentForm(form); setFieldToEdit(null); setActiveTab('voice-filling'); }}
               setActiveTab={setActiveTab}
             />
           )}
@@ -153,9 +169,11 @@ export default function App() {
             <VoiceFilling
               lang={lang}
               currentForm={currentForm}
+              initialFieldId={fieldToEdit}
               setFormValues={handleSetFormValues}
               onOpenFieldHelp={(field) => { setActiveHelpField(field); setActiveTab('help-centre'); }}
               onNavigateReview={() => setActiveTab('review')}
+              onFinishFieldEdit={handleFinishFieldEdit}
             />
           )}
 
@@ -165,7 +183,7 @@ export default function App() {
               currentForm={currentForm}
               user={user}
               setFormValues={handleSetFormValues}
-              onNavigateFilling={() => setActiveTab('voice-filling')}
+              onNavigateFilling={handleEditField}
               onRecordSaved={handleRecordSaved}
               onClearForm={handleClearForm}
               onOpenAuthModal={() => setIsAuthModalOpen(true)}
@@ -198,6 +216,15 @@ export default function App() {
           {activeTab === 'privacy' && (
             <PrivacyCenter
               lang={lang}
+            />
+          )}
+
+          {activeTab === 'secure-details' && (
+            <SecurePersonalDetails
+              lang={lang}
+              user={user}
+              onOpenAuth={() => setIsAuthModalOpen(true)}
+              onBack={() => setActiveTab('dashboard')}
             />
           )}
 

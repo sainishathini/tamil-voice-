@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const dbPath = path.join(__dirname, 'kural_padivam.db');
+const dbPath = process.env.DATABASE_PATH || path.join(__dirname, 'kural_padivam.db');
 
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
@@ -48,6 +48,8 @@ export const dbAll = (sql, params = []) => {
 
 // Initialize schema
 export async function initDb() {
+  await dbRun('PRAGMA foreign_keys = ON');
+
   await dbRun(`
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -103,6 +105,47 @@ export async function initDb() {
       user_id INTEGER PRIMARY KEY,
       attempts INTEGER DEFAULT 0,
       locked_until DATETIME
+    )
+  `);
+
+  await dbRun(`
+    CREATE TABLE IF NOT EXISTS personal_details (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      type TEXT NOT NULL,
+      label TEXT,
+      masked_value TEXT NOT NULL,
+      ciphertext TEXT NOT NULL,
+      iv TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )
+  `);
+
+  await dbRun(`
+    CREATE INDEX IF NOT EXISTS idx_personal_details_user_id
+    ON personal_details (user_id, created_at DESC)
+  `);
+
+  await dbRun(`
+    CREATE TABLE IF NOT EXISTS personal_detail_attempts (
+      user_id INTEGER PRIMARY KEY,
+      attempts INTEGER NOT NULL DEFAULT 0,
+      locked_until DATETIME,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )
+  `);
+
+  await dbRun(`
+    CREATE TABLE IF NOT EXISTS personal_detail_audit (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      detail_id INTEGER,
+      action TEXT NOT NULL,
+      status TEXT NOT NULL,
+      timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     )
   `);
 

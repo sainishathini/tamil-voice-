@@ -6,10 +6,10 @@ import {
   HelpCircle,
   ShieldCheck,
   History,
+  LockKeyhole,
   ArrowRight,
   CheckCircle2,
   Clock,
-  Sparkles,
   Lock,
   Play
 } from 'lucide-react';
@@ -85,19 +85,24 @@ export default function Dashboard({
       icon: History,
       color: 'bg-purple-600',
       badge: lang === 'ta' ? 'செயல்பாட்டு ஏடு' : 'Activity Logs'
+    },
+    {
+      id: 'secure-details',
+      title: t.secureDetailsTitle,
+      desc: t.secureDetailsCardDesc,
+      icon: LockKeyhole,
+      color: 'bg-indigo-600',
+      badge: lang === 'ta' ? 'கடவுச்சொல் பாதுகாப்பு' : 'Password Protected'
     }
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="dashboard-page space-y-8">
       
       {/* Welcome Banner */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 rounded-3xl p-6 sm:p-10 text-white shadow-xl">
-        <div className="relative z-10 max-w-2xl space-y-4">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-blue-700/50 backdrop-blur-md text-blue-200 text-xs font-semibold border border-blue-500/30">
-            <Sparkles className="w-4 h-4 text-amber-300" />
-            <span>{lang === 'ta' ? 'தமிழ் குரல் படிவ உதவியாளர்' : 'Tamil Voice Form Assistant'}</span>
-          </div>
+      <div className="dashboard-hero relative overflow-hidden bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 rounded-3xl p-6 sm:p-10 text-white shadow-xl">
+        <div className="dashboard-hero-copy relative z-10 max-w-2xl space-y-4">
+          <div className="dashboard-hero-mark" aria-hidden="true"><Mic /></div>
           <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
             {t.welcome}
           </h2>
@@ -123,49 +128,53 @@ export default function Dashboard({
             )}
           </div>
         </div>
+        <div className="dashboard-hero-art" aria-hidden="true">
+          <div className="hero-waveform"><i /><i /><i /><i /><i /><i /><i /></div>
+          <div className="hero-microphone"><Mic /></div>
+        </div>
       </div>
 
       {/* Progress Overview */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="dashboard-stats grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div className="stat-card bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
           <div>
             <p className="text-xs font-semibold text-slate-500 uppercase">{t.totalSavedForms}</p>
             <p className="text-3xl font-extrabold text-slate-900 mt-1">{savedRecordsCount}</p>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+          <div className="stat-icon stat-icon-blue w-12 h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
             <FolderLock className="w-6 h-6" />
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div className="stat-card bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
           <div>
             <p className="text-xs font-semibold text-slate-500 uppercase">{t.formsCompletedSession}</p>
             <p className="text-3xl font-extrabold text-slate-900 mt-1">{sessionCompletedCount}</p>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+          <div className="stat-icon stat-icon-green w-12 h-12 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
             <CheckCircle2 className="w-6 h-6" />
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div className="stat-card bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
           <div>
             <p className="text-xs font-semibold text-slate-500 uppercase">{t.completionRate}</p>
             <p className="text-3xl font-extrabold text-blue-700 mt-1">{completionPercentage}%</p>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold">
+          <div className="stat-icon stat-icon-purple w-12 h-12 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold">
             <Mic className="w-6 h-6" />
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div className="stat-card bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
           <div className="overflow-hidden pr-2">
             <p className="text-xs font-semibold text-slate-500 uppercase">{t.recentFormUsed}</p>
             <p className="text-sm font-bold text-slate-900 truncate mt-1">
               {currentForm ? (lang === 'ta' ? currentForm.titleTa || currentForm.title : currentForm.titleEn || currentForm.title) : t.noRecentForm}
             </p>
           </div>
-          <div className="w-12 h-12 shrink-0 rounded-xl bg-indigo-100 text-indigo-800 flex items-center justify-center font-bold">
+          <div className="stat-icon stat-icon-purple w-12 h-12 shrink-0 rounded-xl bg-indigo-100 text-indigo-800 flex items-center justify-center font-bold">
             <Clock className="w-6 h-6" />
           </div>
         </div>
@@ -173,23 +182,23 @@ export default function Dashboard({
       </div>
 
       {/* Dashboard Feature Cards */}
-      <div className="space-y-4">
-        <h3 className="text-xl font-bold text-slate-900 flex items-center space-x-2">
+      <div className="dashboard-features space-y-4">
+        <h3 className="features-heading text-xl font-bold text-slate-900 flex items-center space-x-2">
           <span>{lang === 'ta' ? 'முக்கிய வசதிகள்' : 'Main Features'}</span>
         </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="feature-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {dashboardCards.map((card) => {
             const Icon = card.icon;
             return (
               <div
                 key={card.id}
                 onClick={() => setActiveTab(card.id)}
-                className="group bg-white p-6 rounded-2xl border border-slate-200 hover:border-blue-400 hover:shadow-xl transition-all duration-200 cursor-pointer flex flex-col justify-between"
+                className="feature-card group bg-white p-6 rounded-2xl border border-slate-200 hover:border-blue-400 hover:shadow-xl transition-all duration-200 cursor-pointer flex flex-col justify-between"
               >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <div className={`w-12 h-12 rounded-xl ${card.color} text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform`}>
+                    <div className={`feature-icon w-12 h-12 rounded-xl ${card.color} text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform`}>
                       <Icon className="w-6 h-6" />
                     </div>
                     <span className="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-full">

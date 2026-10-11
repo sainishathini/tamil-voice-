@@ -17,6 +17,8 @@ import { GoogleGenAI } from '@google/genai';
 
 import { initDb, dbRun, dbGet, dbAll } from './db.js';
 import { DETECT_FIELDS_PROMPT, EXTRACT_VALUES_PROMPT, EXPLAIN_FIELD_PROMPT } from './prompts.js';
+import { createPersonalDetailsRouter } from './personalDetailsRouter.js';
+import { getPersistentServerSecret } from './serverSecrets.js';
 
 dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
 dotenv.config();
@@ -26,11 +28,14 @@ const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 5000;
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
-const JWT_SECRET = process.env.JWT_SECRET || 'kural_padivam_super_secret_jwt_key_2026';
+let JWT_SECRET = process.env.JWT_SECRET;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 
 const app = express();
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
 
 // Security Middleware
 app.use(helmet());
@@ -40,6 +45,12 @@ app.use(cors({
 }));
 app.use(cookieParser());
 app.use(express.json({ limit: '10mb' }));
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'production' && !req.secure) {
+    return res.status(400).json({ error: 'HTTPS is required.' });
+  }
+  next();
+});
 
 // Rate Limiter
 const apiLimiter = rateLimit({
@@ -83,6 +94,8 @@ const authenticateToken = (req, res, next) => {
     next();
   });
 };
+
+app.use('/api/personal-details', createPersonalDetailsRouter(authenticateToken));
 
 // --- AUTHENTICATION ROUTES ---
 
@@ -491,7 +504,11 @@ app.get('/api/logs', authenticateToken, async (req, res) => {
 });
 
 // Start Server
-initDb().then(() => {
+Promise.all([
+  initDb(),
+  getPersistentServerSecret('JWT_SECRET', 'jwt.key')
+]).then(([, jwtSecret]) => {
+  JWT_SECRET = jwtSecret;
   app.listen(PORT, () => {
     console.log(`Kural Padivam Server running on http://localhost:${PORT}`);
   });
